@@ -1,4 +1,4 @@
-Bun.build({
+export const builder = () => Bun.build({
     entrypoints: ["./src/web/index.ts"],
     outdir: "./public",
     target: "browser",

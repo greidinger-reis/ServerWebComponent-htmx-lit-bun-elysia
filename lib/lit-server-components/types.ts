@@ -6,24 +6,30 @@ import { LitElement } from 'lit'
 export type LitElementConstructor = new (...args: any[]) => LitElement
 export type GenericConstructor<T> = new (...args: any[]) => T
 export type HTTPVerb = 'get' | 'post' | 'put' | 'delete' | 'patch'
-export type WiredEvent = string
 export type WiredProperty = string
-export type Handler = () => any
+export type Handler = () => Promise<any>
+export type HandlerFnName = string
 export type ComponentTag = string
-export type ServerAction = `${HTTPVerb}:${WiredEvent}:${WiredProperty}`
+
+export enum SWCKind {
+	Loader = 'loader',
+	Action = 'action',
+}
+
 export type CustomElementClass = Omit<typeof HTMLElement, 'new'>
+
 export type ServerComponentRoute = {
-	httpVerb: HTTPVerb
-	action: WiredEvent
-	componentTag: ComponentTag
-	res: (ctx: Context) => Promise<any>
+	kind: SWCKind
+	component: ComponentTag
+	action: HandlerFnName
+	res: (ctx: Context, wiredProp?: WiredProperty) => Promise<any>
 }
-export interface ISWC {
-	[action: WiredEvent]: (parameters: { [key: string]: any }) => void
-}
-export type Prop = {
-	[prop: WiredProperty]: string
-}
-export type Event = {
-	[action: WiredEvent]: Prop
-}
+// export interface ISWC {
+// 	[action: WiredEvent]: (parameters: { [key: string]: any }) => void
+// }
+// export type Prop = {
+// 	[prop: WiredProperty]: string
+// }
+// export type Event = {
+// 	[action: WiredEvent]: Prop
+// }

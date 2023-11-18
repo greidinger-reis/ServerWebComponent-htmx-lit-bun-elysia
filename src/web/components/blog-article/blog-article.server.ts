@@ -1,5 +1,5 @@
 import type { TPostProps } from '@/types'
-import { getServerProps } from '@lit-swc'
+import { getServerProps } from '~/lib/lit-server-components'
 import { Context } from 'elysia'
 
 export const fetchblogpost = async (ctx: Context) => {

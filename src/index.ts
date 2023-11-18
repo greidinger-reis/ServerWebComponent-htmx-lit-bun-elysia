@@ -1,11 +1,14 @@
+import { builder } from '~/macros/build' assert { type: 'macro' }
 import { Elysia } from 'elysia'
 import { staticPlugin } from '@elysiajs/static'
-import { SWCRouter } from '@lit-swc'
+// import { SWCRouter } from '~/lib/lit-server-components'
 import { layout } from './layout'
 import { html } from 'lit'
 import { map } from 'lit/directives/map.js'
 import { context } from './context'
 import '@/web/register-components'
+
+await builder()
 
 const post = {
 	title: 'hello world',
@@ -18,9 +21,11 @@ const todos = [
 	{ _id: 1, title: 'foobar', completed: false },
 	{ _id: 2, title: 'bazbaz', completed: true },
 ]
+
 const app = new Elysia()
 	.use(staticPlugin())
-	.use(SWCRouter(context))
+	// .use(SWCRouter(context))
+	.use(context)
 	.get('/', (ctx) => {
 		return ctx.render(
 			layout(html`
@@ -51,11 +56,11 @@ const app = new Elysia()
 		ctx.render(html`
 			<ul>
 				${map(
-					todos,
-					({ _id, title, completed }) => html`
+			todos,
+			({ _id, title, completed }) => html`
 						<to-do ._id=${_id} .title=${title} ?completed=${completed}> </to-do>
 					`,
-				)}
+		)}
 			</ul>
 		`),
 	)

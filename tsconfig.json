@@ -13,6 +13,7 @@
     /* Language and Environment */
     "lib": ["ESNext", "DOM"],
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "useDefineForClassFields": true,
     "target": "ESNext",
     "module": "ESNext",    
@@ -26,7 +27,7 @@
     "plugins": [{ "name": "ts-lit-plugin" }],
     "paths": {
       "@/*": ["./src/*"],
-      "@lit-swc": ["./lib/lit-server-components"]
+      "~/*": ["./*"]
     }
   }
 }
