@@ -3,20 +3,21 @@
   "version": "1.0.50",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts"
+    "start": "bun run macros/build.ts && bun run src/index.ts"
   },
   "dependencies": {
-    "@elysiajs/static": "^0.6.0",
-    "@lit-labs/ssr": "^3.1.6",
-    "@lit-labs/ssr-client": "^1.1.3",
-    "@lit-labs/task": "^3.0.2",
+    "@elysiajs/static": "latest",
+    "@lit-labs/ssr": "3.1.6",
+    "@lit-labs/ssr-client": "1.1.3",
+    "@lit-labs/task": "3.0.2",
     "elysia": "latest",
-    "elysia-autoroutes": "^0.2.2",
-    "lit": "^2.8.0",
+    "lit": "2.8.0",
     "zod": "^3.22.2"
   },
   "devDependencies": {
-    "bun-types": "^1.0.3"
+    "bun-types": "^1.0.3",
+    "prettier": "^3.1.0",
+    "ts-lit-plugin": "^2.0.1"
   },
   "module": "src/index.js"
 }

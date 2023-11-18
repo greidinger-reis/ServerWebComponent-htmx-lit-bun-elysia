@@ -1,11 +1,10 @@
-export async function builder() {
-  return await Bun.build({
-    entrypoints: ['./src/web/app.ts'],
-    outdir: './public',
+Bun.build({
+    entrypoints: ["./src/web/index.ts"],
+    outdir: "./public",
+    target: "browser",
     minify: {
-      identifiers: false,
-      whitespace: true,
-      syntax: true
-    }
-  })
-}
+        identifiers: false,
+        whitespace: true,
+        syntax: true,
+    },
+});
