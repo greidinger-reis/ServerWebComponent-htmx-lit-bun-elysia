@@ -5,6 +5,7 @@ import {
 	SWCKind,
 } from './types'
 import { isServer } from 'lit'
+import { getPathFromLastInCallStack } from './util'
 
 export namespace SWC {
 	export let basePath = '/api/swc'
@@ -22,9 +23,9 @@ export function getServerProps<T>(ctx: Context): T {
 }
 
 //FIXME: Find a better way to pass the component's path
-export function loader({ bind, path }: { bind?: string, path: string }) {
+export function loader(args?: { bind: string }) {
 	return function(target: any, action: string) {
-		const componentTag = target.constructor.name
+		const componentTag = `x-${target.constructor.name.toLowerCase()}`
 		const route: ServerComponentRoute = {
 			kind: SWCKind.Loader,
 			action,
@@ -34,10 +35,10 @@ export function loader({ bind, path }: { bind?: string, path: string }) {
 		}
 
 		if (isServer) {
-			const filename = path.split('/').pop()!.replace('.ts', '')!
-			const serverFilename = filename.replace('.ts', '.server.ts')
+			const filePath = getPathFromLastInCallStack()!
+			const serverPath = filePath.replace('.ts', '.server.ts')
 			route.res = async (ctx: Context) => {
-				const mod = await import(serverFilename)
+				const mod = await import(serverPath)
 				return mod[action](ctx)
 			}
 
@@ -45,19 +46,23 @@ export function loader({ bind, path }: { bind?: string, path: string }) {
 			return
 		}
 
+		const element = document.querySelector(componentTag)
+		if (!element) throw Error('FATAL: Could not find element with tag name: ' + componentTag)
+
 		SWC.map.get(componentTag)?.forEach(
 			(route) => {
-				target[action] = (parameters: { [key: string]: any }) => SWC.send(action, { detail: { parameters } })
-				const httpVerb = route.kind === SWCKind.Loader ? 'get' : 'post'
-				console.log({route, target, action })
+				//@ts-ignore
+				element[action] = (parameters: { [key: string]: any }) => SWC.send(action, { detail: { parameters } })
+				const httpVerb = route.kind === SWCKind.Action ? 'post' : 'get'
 
-				target.setAttribute('hx-trigger', `${action} from:body`)
-				target.setAttribute(`hx-${httpVerb}`, `${SWC.basePath}/${componentTag}/${action}`)
-				target.setAttribute('hx-swap', 'none')
+				element.setAttribute('hx-trigger', `${action} from:body`)
+				element.setAttribute(`hx-${httpVerb}`, `${SWC.basePath}/${componentTag}/${action}`)
+				element.setAttribute('hx-swap', 'none')
+				// console.log({httpVerb, route, element, action })
 
-				if (bind) {
+				if (args) {
 					document.body.addEventListener(`${componentTag}:${action}:res`, ({ detail: { v } }: CustomEventInit) => {
-						target.setAttribute(bind, typeof v === 'object' ? JSON.stringify(v) : v)
+						element.setAttribute(args.bind, typeof v === 'object' ? JSON.stringify(v) : v)
 					})
 				}
 			},
@@ -66,9 +71,9 @@ export function loader({ bind, path }: { bind?: string, path: string }) {
 }
 
 //FIXME: Find a better way to pass the component's path
-export function action({ bind, path }: { bind?: string, path: string }) {
+export function action(args?: { bind: string }) {
 	return function(target: any, action: string) {
-		const componentTag = target.constructor.name
+		const componentTag = `x-${target.constructor.name.toLowerCase()}`
 		const route: ServerComponentRoute = {
 			kind: SWCKind.Action,
 			action,
@@ -78,10 +83,12 @@ export function action({ bind, path }: { bind?: string, path: string }) {
 		}
 
 		if (isServer) {
-			const filename = path.split('/').pop()!.replace('.ts', '')!
-			const serverFilename = filename.replace('.ts', '.server.ts')
+			const filePath = getPathFromLastInCallStack()!
+			console.log(filePath)
+			const serverPath = filePath.replace('.ts', '.server.ts')
+			console.log(serverPath)
 			route.res = async (ctx: Context) => {
-				const mod = await import(serverFilename)
+				const mod = await import(serverPath)
 				return mod[action](ctx)
 			}
 
@@ -89,20 +96,22 @@ export function action({ bind, path }: { bind?: string, path: string }) {
 			return
 		}
 
+		const element = document.querySelector(componentTag)
+		if (!element) throw Error('FATAL: Could not find element with tag name: ' + componentTag)
+
 		SWC.map.get(componentTag)?.forEach(
 			(route) => {
-				console.log({route})
-				target[action] = (parameters: { [key: string]: any }) => SWC.send(action, { detail: { parameters } })
-				const httpVerb = route.kind === SWCKind.Loader ? 'get' : 'post'
+				//@ts-ignore
+				element[action] = (parameters: { [key: string]: any }) => SWC.send(action, { detail: { parameters } })
+				const httpVerb = route.kind === SWCKind.Action ? 'post' : 'get'
 
-				target.setAttribute('hx-trigger', `${action} from:body`)
-				target.setAttribute(`hx-${httpVerb}`, `${SWC.basePath}/${componentTag}/${action}`)
-				target.setAttribute('hx-swap', 'none')
-				console.log({ target, action, attributes: target.attributes })
+				element.setAttribute('hx-trigger', `${action} from:body`)
+				element.setAttribute(`hx-${httpVerb}`, `${SWC.basePath}/${componentTag}/${action}`)
+				element.setAttribute('hx-swap', 'none')
 
-				if (bind) {
+				if (args) {
 					document.body.addEventListener(`${componentTag}:${action}:res`, ({ detail: { v } }: CustomEventInit) => {
-						target.setAttribute(bind, typeof v === 'object' ? JSON.stringify(v) : v)
+						element.setAttribute(args.bind, typeof v === 'object' ? JSON.stringify(v) : v)
 					})
 				}
 			},

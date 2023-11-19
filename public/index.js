@@ -816,44 +816,23 @@ var SWCKind;
 })(SWCKind || (SWCKind = {}));
 
 // node_modules/@lit/reactive-elemen
-function loader({ bind, path }) {
-  return function(target, action) {
-    const componentTag = target.constructor.name;
-    const route = {
-      kind: SWCKind.Loader,
-      action
-    };
-    if (!SWC.map.has(componentTag)) {
-      SWC.map.set(componentTag, new Set([route]));
+function getPathFromLastInCallStack() {
+  const stack = new Error().stack;
+  const lines = stack.split("\n");
+  for (let i6 = lines.length - 1;i6 >= 0; i6--) {
+    const line = lines[i6].trim();
+    const match = line.match(/\((.*)(?::\d+:\d+)\)/);
+    if (match) {
+      return match[1];
     }
-    if (o5) {
-      const filename = path.split("/").pop().replace(".ts", "");
-      const serverFilename = filename.replace(".ts", ".server.ts");
-      route.res = async (ctx) => {
-        const mod = await import(serverFilename);
-        return mod[action](ctx);
-      };
-      SWC.map.set(componentTag, SWC.map.get(componentTag).add(route));
-      return;
-    }
-    SWC.map.get(componentTag)?.forEach((route2) => {
-      target[action] = (parameters) => SWC.send(action, { detail: { parameters } });
-      const httpVerb = route2.kind === SWCKind.Loader ? "get" : "post";
-      console.log({ route: route2, target, action });
-      target.setAttribute("hx-trigger", `${action} from:body`);
-      target.setAttribute(`hx-${httpVerb}`, `${SWC.basePath}/${componentTag}/${action}`);
-      target.setAttribute("hx-swap", "none");
-      if (bind) {
-        document.body.addEventListener(`${componentTag}:${action}:res`, ({ detail: { v: v3 } }) => {
-          target.setAttribute(bind, typeof v3 === "object" ? JSON.stringify(v3) : v3);
-        });
-      }
-    });
-  };
+  }
+  return null;
 }
-function action({ bind, path }) {
+
+// node_modules/@lit/reactive-elemen
+function action(args) {
   return function(target, action2) {
-    const componentTag = target.constructor.name;
+    const componentTag = `x-${target.constructor.name.toLowerCase()}`;
     const route = {
       kind: SWCKind.Action,
       action: action2
@@ -862,26 +841,29 @@ function action({ bind, path }) {
       SWC.map.set(componentTag, new Set([route]));
     }
     if (o5) {
-      const filename = path.split("/").pop().replace(".ts", "");
-      const serverFilename = filename.replace(".ts", ".server.ts");
+      const filePath = getPathFromLastInCallStack();
+      console.log(filePath);
+      const serverPath = filePath.replace(".ts", ".server.ts");
+      console.log(serverPath);
       route.res = async (ctx) => {
-        const mod = await import(serverFilename);
+        const mod = await import(serverPath);
         return mod[action2](ctx);
       };
       SWC.map.set(componentTag, SWC.map.get(componentTag).add(route));
       return;
     }
+    const element = document.querySelector(componentTag);
+    if (!element)
+      throw Error("FATAL: Could not find element with tag name: " + componentTag);
     SWC.map.get(componentTag)?.forEach((route2) => {
-      console.log({ route: route2 });
-      target[action2] = (parameters) => SWC.send(action2, { detail: { parameters } });
-      const httpVerb = route2.kind === SWCKind.Loader ? "get" : "post";
-      target.setAttribute("hx-trigger", `${action2} from:body`);
-      target.setAttribute(`hx-${httpVerb}`, `${SWC.basePath}/${componentTag}/${action2}`);
-      target.setAttribute("hx-swap", "none");
-      console.log({ target, action: action2, attributes: target.attributes });
-      if (bind) {
+      element[action2] = (parameters) => SWC.send(action2, { detail: { parameters } });
+      const httpVerb = route2.kind === SWCKind.Action ? "post" : "get";
+      element.setAttribute("hx-trigger", `${action2} from:body`);
+      element.setAttribute(`hx-${httpVerb}`, `${SWC.basePath}/${componentTag}/${action2}`);
+      element.setAttribute("hx-swap", "none");
+      if (args) {
         document.body.addEventListener(`${componentTag}:${action2}:res`, ({ detail: { v: v3 } }) => {
-          target.setAttribute(bind, typeof v3 === "object" ? JSON.stringify(v3) : v3);
+          element.setAttribute(args.bind, typeof v3 === "object" ? JSON.stringify(v3) : v3);
         });
       }
     });
@@ -910,16 +892,7 @@ __legacyDecorateClassTS([
   __legacyMetadataTS("design:type", Number)
 ], Counter.prototype, "count", undefined);
 __legacyDecorateClassTS([
-  loader({
-    bind: "count",
-    path: import.meta.path
-  }),
-  __legacyMetadataTS("design:type", Object)
-], Counter.prototype, "getCount", undefined);
-__legacyDecorateClassTS([
-  action({
-    path: import.meta.path
-  }),
+  action({ bind: "count" }),
   __legacyMetadataTS("design:type", Object)
 ], Counter.prototype, "add", undefined);
 Counter = __legacyDecorateClassTS([
