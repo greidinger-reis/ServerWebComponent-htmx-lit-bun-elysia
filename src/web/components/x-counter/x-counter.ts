@@ -12,6 +12,6 @@ export class Counter extends LitElement {
 	add: typeof add
 
 	render() {
-		return html` <button @click=${this.add}>push me daddy ${this.count}</button>`
+		return html` <button @click=${() => this.add(2)}>push me daddy ${this.count}</button>`
 	}
 }

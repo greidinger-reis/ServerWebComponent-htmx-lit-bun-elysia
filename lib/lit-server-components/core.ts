@@ -5,7 +5,7 @@ import {
 	SWCKind,
 } from './types'
 import { isServer } from 'lit'
-import { getPathFromLastInCallStack } from './util'
+import { getPathFromLastInCallStack } from './utils'
 
 export namespace SWC {
 	export let basePath = '/api/swc'

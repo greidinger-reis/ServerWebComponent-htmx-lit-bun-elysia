@@ -13,7 +13,7 @@ var __legacyMetadataTS = (k, v) => {
     return Reflect.metadata(k, v);
 };
 
-// node_modules/@lit/reactive-elemen
+// lib/lit-server-components/utils.t
 var P = function(t, i) {
   if (!Array.isArray(t) || !t.hasOwnProperty("raw"))
     throw Error("invalid template strings array");
@@ -308,7 +308,7 @@ var D = (t2, i2, s2) => {
   return l2._$AI(t2), l2;
 };
 
-// node_modules/@lit/reactive-element/css-tag.j
+// lib/lit-server-components/utils.ts/css-tag.j
 var r2 = { boundAttributeSuffix: j.O, marker: j.P, markerMatch: j.A, HTML_RESULT: j.C, getTemplateHtml: j.M, overrideDirectiveResolve: (e2, t2) => class extends e2 {
   _$AS(e3, r3) {
     return t2(this, r3);
@@ -320,10 +320,10 @@ var r2 = { boundAttributeSuffix: j.O, marker: j.P, markerMatch: j.A, HTML_RESULT
   return e2.j = (e3) => i2 = e3, e2._$AI(r3, e2, a2), i2;
 }, connectedDisconnectable: (e2) => ({ ...e2, _$AU: true }), resolveDirective: j.D, AttributePart: j.V, PropertyPart: j.U, BooleanAttributePart: j.H, EventPart: j.N, ElementPart: j.F, TemplateInstance: j.L, isIterable: j.R, ChildPart: j.I };
 
-// node_modules/@lit/reactive-element
+// lib/lit-server-components/utils.ts
 var t2 = { ATTRIBUTE: 1, CHILD: 2, PROPERTY: 3, BOOLEAN_ATTRIBUTE: 4, EVENT: 5, ELEMENT: 6 };
 
-// node_modules/@lit/reactive-element/css-tag
+// lib/lit-server-components/utils.ts/css-tag
 var i2 = (o2) => o2 === null || typeof o2 != "object" && typeof o2 != "function";
 var t3 = (o2, l2) => l2 === undefined ? (o2 == null ? undefined : o2._$litType$) !== undefined : (o2 == null ? undefined : o2._$litType$) === l2;
 var v2 = (o2) => {
@@ -332,7 +332,7 @@ var v2 = (o2) => {
 };
 var e2 = (o2) => o2.strings === undefined;
 
-// node_modules/@lit/reactive-element/css-tag.js/base.jsssig
+// lib/lit-server-components/utils.ts/css-tag.js/base.jsssig
 var { TemplateInstance: i3, isIterable: s2, resolveDirective: c2, ChildPart: d2, ElementPart: p2 } = r2;
 var f2 = (e3, t4, r3 = {}) => {
   if (t4._$litPart$ !== undefined)
@@ -439,7 +439,7 @@ var w2 = (e3) => {
   return btoa(r3);
 };
 
-// node_modules/@lit/reactive-element/css-tag.js/base.jsssigned-nod
+// lib/lit-server-components/utils.ts/css-tag.js/base.jsssigned-nod
 globalThis.litElementHydrateSupport = ({ LitElement: s3 }) => {
   const h3 = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(s3), "observedAttributes").get;
   Object.defineProperty(s3, "observedAttributes", { get() {
@@ -475,14 +475,14 @@ globalThis.litElementHydrateSupport = ({ LitElement: s3 }) => {
   };
 };
 
-// node_modules/@lit/reactive-e
+// lib/lit-server-components/ut
 document.body.addEventListener("htmx:configRequest", (e3) => {
   if (e3.detail.verb === "post") {
     e3.detail.headers["swc-params"] = JSON.stringify(e3.detail.triggeringEvent.detail.parameters);
   }
 });
 
-// node_modules/@lit/reactive-element/css-tag.js
+// lib/lit-server-components/utils.ts/css-tag.js
 var t4 = window;
 var e3 = t4.ShadowRoot && (t4.ShadyCSS === undefined || t4.ShadyCSS.nativeShadow) && ("adoptedStyleSheets" in Document.prototype) && ("replace" in CSSStyleSheet.prototype);
 var s3 = Symbol();
@@ -531,7 +531,7 @@ var c3 = e3 ? (t5) => t5 : (t5) => t5 instanceof CSSStyleSheet ? ((t6) => {
   return r3(e4);
 })(t5) : t5;
 
-// node_modules/@lit/reactive-element/css-tag.js/base.jss
+// lib/lit-server-components/utils.ts/css-tag.js/base.jss
 var s4;
 var e4 = window;
 var r4 = e4.trustedTypes;
@@ -750,7 +750,7 @@ class u3 extends HTMLElement {
   }
 }
 u3[d3] = true, u3.elementProperties = new Map, u3.elementStyles = [], u3.shadowRootOptions = { mode: "open" }, o3 == null || o3({ ReactiveElement: u3 }), ((s4 = e4.reactiveElementVersions) !== null && s4 !== undefined ? s4 : e4.reactiveElementVersions = []).push("1.6.3");
-// node_modules/@lit/reactive-element/css-
+// lib/lit-server-components/utils.ts/css-
 var l3;
 var o4;
 class s5 extends u3 {
@@ -782,16 +782,16 @@ s5.finalized = true, s5._$litElement$ = true, (l3 = globalThis.litElementHydrate
 var n4 = globalThis.litElementPolyfillSupport;
 n4 == null || n4({ LitElement: s5 });
 ((o4 = globalThis.litElementVersions) !== null && o4 !== undefined ? o4 : globalThis.litElementVersions = []).push("3.3.3");
-// node_modules/@lit/reactive-element
+// lib/lit-server-components/utils.ts
 var o5 = false;
-// node_modules/@lit/reactive-element/css-tag.js/base.jsssigned-no
+// lib/lit-server-components/utils.ts/css-tag.js/base.jsssigned-no
 var e5 = (e6) => (n5) => typeof n5 == "function" ? ((e7, n6) => (customElements.define(e7, n6), n6))(e6, n5) : ((e7, n6) => {
   const { kind: t5, elements: s6 } = n6;
   return { kind: t5, elements: s6, finisher(n7) {
     customElements.define(e7, n7);
   } };
 })(e6, n5);
-// node_modules/@lit/reactive-element/css-tag.js/base.jsssig
+// lib/lit-server-components/utils.ts/css-tag.js/base.jsssig
 var n5 = function(n6) {
   return (t5, o6) => o6 !== undefined ? e6(n6, t5, o6) : i5(n6, t5);
 };
@@ -805,17 +805,17 @@ var i5 = (i6, e6) => e6.kind === "method" && e6.descriptor && !("value" in e6.de
 var e6 = (i6, e7, n6) => {
   e7.constructor.createProperty(n6, i6);
 };
-// node_modules/@lit/reactive-element/css-tag.js/base.jsssigned-nodes.js.js
+// lib/lit-server-components/utils.ts/css-tag.js/base.jsssigned-nodes.js.js
 var n6;
 var e7 = ((n6 = window.HTMLSlotElement) === null || n6 === undefined ? undefined : n6.prototype.assignedElements) != null ? (o7, n7) => o7.assignedElements(n7) : (o7, n7) => o7.assignedNodes(n7).filter((o8) => o8.nodeType === Node.ELEMENT_NODE);
-// node_modules/@lit/reactive-element
+// lib/lit-server-components/utils.ts
 var SWCKind;
 (function(SWCKind2) {
   SWCKind2["Loader"] = "loader";
   SWCKind2["Action"] = "action";
 })(SWCKind || (SWCKind = {}));
 
-// node_modules/@lit/reactive-elemen
+// lib/lit-server-components/utils.ts
 function getPathFromLastInCallStack() {
   const stack = new Error().stack;
   const lines = stack.split("\n");
@@ -829,7 +829,7 @@ function getPathFromLastInCallStack() {
   return null;
 }
 
-// node_modules/@lit/reactive-elemen
+// lib/lit-server-components/utils.t
 function action(args) {
   return function(target, action2) {
     const componentTag = `x-${target.constructor.name.toLowerCase()}`;
@@ -878,13 +878,13 @@ var SWC;
   }
   SWC.send = send;
 })(SWC || (SWC = {}));
-// node_modules/@lit/reactive-element/css-ta
+// lib/lit-server-components/utils.ts/css-ta
 class Counter extends s5 {
   constructor() {
     super(...arguments);
   }
   render() {
-    return x` <button @click=${this.add}>push me daddy ${this.count}</button>`;
+    return x` <button @click=${() => this.add(2)}>push me daddy ${this.count}</button>`;
   }
 }
 __legacyDecorateClassTS([
@@ -899,7 +899,7 @@ Counter = __legacyDecorateClassTS([
   e5("x-counter")
 ], Counter);
 
-// node_modules/@lit/reactive-elemen
+// lib/lit-server-components/utils.t
 class Todo extends s5 {
   constructor() {
     super(...arguments);

@@ -16,8 +16,8 @@ export const context = new Elysia({
 			return (ctx.db.query('select count from counter').get() as { count: number }).count
 		}
 
-		function add(): number {
-			db.prepare('UPDATE counter SET count = ?').run(count() + 1)
+		function add(amount = 1): number {
+			db.prepare('UPDATE counter SET count = ?').run(count() + amount)
 			return count()
 		}
 
