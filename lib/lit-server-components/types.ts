@@ -20,9 +20,9 @@ export type CustomElementClass = Omit<typeof HTMLElement, 'new'>
 
 export type ServerComponentRoute = {
 	kind: SWCKind
-	component: ComponentTag
 	action: HandlerFnName
-	res: (ctx: Context, wiredProp?: WiredProperty) => Promise<any>
+	bind?: WiredProperty
+	res?: (ctx: Context) => Promise<any>
 }
 // export interface ISWC {
 // 	[action: WiredEvent]: (parameters: { [key: string]: any }) => void

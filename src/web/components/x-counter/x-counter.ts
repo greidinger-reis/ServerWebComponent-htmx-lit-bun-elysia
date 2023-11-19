@@ -1,6 +1,7 @@
 import { LitElement, html } from 'lit'
-import { customElement, state } from 'lit/decorators.js'
-import { loader } from '~/lib/lit-server-components/core'
+import { customElement, property, state } from 'lit/decorators.js'
+import { action, loader } from '~/lib/lit-server-components'
+import type { add, getCount } from './x-counter.server'
 
 // @serverElement('x-counter', ['post:add:count'])
 // export class xCounter extends LitServerElement<{
@@ -14,21 +15,21 @@ import { loader } from '~/lib/lit-server-components/core'
 // 	}
 // }
 
-@customElement('x-counter2')
+@customElement('x-counter')
 export class Counter extends LitElement {
-	@state()
+	@property({ type: Number, reflect: true })
 	count: number
-
-	// @action({
-	// 	bind: this.count
-	// })
-	// add: typeof add
 
 	@loader({
 		bind: 'count',
 		path: import.meta.path
 	})
-	getCount: any
+	getCount: typeof getCount
+
+	@action({
+		path: import.meta.path
+	})
+	add: typeof add
 
 	render() {
 		return html` <button @click=${this.add}>push me daddy ${this.count}</button>`

@@ -1,5 +1,9 @@
 import { Context } from '@/context'
 
-export const add = (ctx: Context): number => {
+export function getCount(ctx: Context): number {
+	return ctx.count()
+}
+
+export function add(ctx: Context): number {
 	return ctx.add()
 }

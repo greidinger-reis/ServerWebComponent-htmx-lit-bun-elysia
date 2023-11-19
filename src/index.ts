@@ -1,7 +1,7 @@
 import { builder } from '~/macros/build' assert { type: 'macro' }
 import { Elysia } from 'elysia'
 import { staticPlugin } from '@elysiajs/static'
-// import { SWCRouter } from '~/lib/lit-server-components'
+import { SWCRouter } from '~/lib/lit-server-components'
 import { layout } from './layout'
 import { html } from 'lit'
 import { map } from 'lit/directives/map.js'
@@ -24,8 +24,8 @@ const todos = [
 
 const app = new Elysia()
 	.use(staticPlugin())
-	// .use(SWCRouter(context))
-	.use(context)
+	.use(SWCRouter(context))
+	// .use(context)
 	.get('/', (ctx) => {
 		return ctx.render(
 			layout(html`

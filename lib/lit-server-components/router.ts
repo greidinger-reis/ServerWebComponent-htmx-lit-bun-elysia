@@ -1,47 +1,45 @@
-import { Elysia } from 'elysia'
+import { Context as RequestContext, Elysia } from 'elysia'
 import { SWC } from './core'
 import { SWCKind } from '.';
 
-
-/**
- * @description SWCRouterOptions is the options for the SWCRouter
- * @field basePath the base path for the router. Default: '/api/swc/'
- */
 export type SWCRouterOptions = {
-	basePath: string;
+	prefix: string;
 }
 
-export function SWCRouter<Ctx extends Elysia>(ctx: Ctx, opts: SWCRouterOptions = { basePath: '/api/swc' }): Ctx {
+export function SWCRouter<Context extends Elysia>(ctx: Context, swcOpts: SWCRouterOptions = { prefix: '/api/swc' }): Context {
 	for (const [componentTag, routes] of SWC.map.entries()) {
 		for (const route of routes) {
-			const routePath = `${opts.basePath}/${route.component}/${route.action}`
-			const handler = async (ctx: Ctx) =>
+			if (!route.res) {
+				throw new Error(`No res function for ${componentTag}:${route.action}`)
+			}
+			const routePath = `${swcOpts.prefix}/${componentTag}/${route.action}`
+			const handler = async (ctx: RequestContext) =>
 				new Response(null, {
 					headers: {
 						'HX-Trigger': JSON.stringify(
 							Object.fromEntries([
-								[`${route.component}:${route.action}:res`, { v: await route.res(ctx) }]
+								[`${componentTag}:${route.action}:res`, { v: await route.res!(ctx) }]
 							]),
 						),
 					},
-				}),
-				{
-					beforeHandle: ({ set, request: { headers } }) => {
-						if (!headers.has('hx-request')) {
-							set.status = 'Bad Request'
-							return
-						}
-					},
-				}
+				})
 
-		if (route.kind === SWCKind.Action) {
-			ctx.post(routePath, handler)
-		} else if (route.kind === SWCKind.Loader) {
-			ctx.get(routePath, handler)
+			const opts = {
+				beforeHandle: ({ set, request: { headers } }: any) => {
+					if (!headers.has('hx-request')) {
+						set.status = 'Bad Request'
+						return
+					}
+				},
+			}
+
+			if (route.kind === SWCKind.Action) {
+				ctx.post(routePath, handler, opts)
+			} else if (route.kind === SWCKind.Loader) {
+				ctx.get(routePath, handler, opts)
+			}
 		}
 	}
-}
-})
 
-return ctx
+	return ctx
 }
